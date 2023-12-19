@@ -1,5 +1,6 @@
 package com.example.RealEstateManagement.controller;
 
+import com.example.RealEstateManagement.exception.ResourceNotFoundException;
 import com.example.RealEstateManagement.model.RealEstateAgent;
 import com.example.RealEstateManagement.service.RealEstateAgentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +15,12 @@ public class RealEstateAgentController {
     private RealEstateAgentService realEstateAgentService;
 
     @GetMapping
-    public List<RealEstateAgent> getAllRealEstateAgent(){
-        return  realEstateAgentService.getAllRealEstateAgent();
+    public List<RealEstateAgent> getAllRealEstateAgent() {
+        return realEstateAgentService.getAllRealEstateAgent();
     }
 
     @PostMapping
-    public RealEstateAgent addRealEstateAgent (@RequestBody RealEstateAgent property) {
+    public RealEstateAgent addRealEstateAgent(@RequestBody RealEstateAgent property) {
         return realEstateAgentService.createRealEstateAgent(property);
     }
 
@@ -28,4 +29,20 @@ public class RealEstateAgentController {
         realEstateAgentService.deleteRealEstateAgent(id);
     }
 
+    @GetMapping("/{id}")
+    public RealEstateAgent getRealEstateAgentById(@PathVariable Long id) {
+        return realEstateAgentService.getRealEstateAgentById(id);
+    }
+
+    @PutMapping("/{id}")
+    public RealEstateAgent updateRealEstateAgent(@PathVariable Long id, @RequestBody RealEstateAgent updatedRealEstateAgent) {
+        RealEstateAgent existingRealEstateAgent = realEstateAgentService.getRealEstateAgentById(id);
+        if (existingRealEstateAgent == null) {
+            throw new ResourceNotFoundException("Real Estate Agent with Id not found " + id);
+        }
+        existingRealEstateAgent.setEmail(updatedRealEstateAgent.getEmail());
+        existingRealEstateAgent.setPhone(updatedRealEstateAgent.getPhone());
+        realEstateAgentService.createRealEstateAgent(existingRealEstateAgent);
+        return existingRealEstateAgent;
+    }
 }

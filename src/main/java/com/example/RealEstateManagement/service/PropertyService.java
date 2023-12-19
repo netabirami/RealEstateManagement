@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class PropertyService {
@@ -23,5 +24,11 @@ public class PropertyService {
 
     public void deleteProperty(Long id) {
         propertyRepository.deleteById(id);
+    }
+
+    public Property getPropertyById(Long id) {
+        return propertyRepository.findById(id).orElseThrow(
+                () -> new NoSuchElementException("Property not found with ID: " + id)
+        );
     }
 }

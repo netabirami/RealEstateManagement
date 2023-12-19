@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class RealEstateAgentService {
@@ -21,5 +22,10 @@ public class RealEstateAgentService {
 
     public void deleteRealEstateAgent(Long id) {
         realEstateAgentRepository.deleteById(id);
+    }
+    public RealEstateAgent getRealEstateAgentById(Long id) {
+        return realEstateAgentRepository.findById(id).orElseThrow(
+                () -> new NoSuchElementException("RealEstateAgent not found with ID: " + id)
+        );
     }
 }
