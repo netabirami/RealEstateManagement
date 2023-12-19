@@ -12,6 +12,7 @@ import java.util.NoSuchElementException;
 public class RealEstateAgentService {
     @Autowired
     private RealEstateAgentRepository realEstateAgentRepository;
+
     public List<RealEstateAgent> getAllRealEstateAgent() {
         return realEstateAgentRepository.findAll();
     }
