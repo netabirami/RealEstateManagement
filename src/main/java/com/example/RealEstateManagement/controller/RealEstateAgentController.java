@@ -1,12 +1,12 @@
 package com.example.RealEstateManagement.controller;
 
-import com.example.RealEstateManagement.exception.ResourceNotFoundException;
 import com.example.RealEstateManagement.model.RealEstateAgent;
 import com.example.RealEstateManagement.service.RealEstateAgentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/realestateagents")
@@ -38,7 +38,7 @@ public class RealEstateAgentController {
     public RealEstateAgent updateRealEstateAgent(@PathVariable Long id, @RequestBody RealEstateAgent updatedRealEstateAgent) {
         RealEstateAgent existingRealEstateAgent = realEstateAgentService.getRealEstateAgentById(id);
         if (existingRealEstateAgent == null) {
-            throw new ResourceNotFoundException("Real Estate Agent with Id not found " + id);
+            throw new NoSuchElementException("Real Estate Agent with Id not found " + id);
         }
         existingRealEstateAgent.setEmail(updatedRealEstateAgent.getEmail());
         existingRealEstateAgent.setPhone(updatedRealEstateAgent.getPhone());
