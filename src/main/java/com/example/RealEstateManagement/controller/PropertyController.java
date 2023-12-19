@@ -1,12 +1,12 @@
 package com.example.RealEstateManagement.controller;
 
-import com.example.RealEstateManagement.exception.ResourceNotFoundException;
 import com.example.RealEstateManagement.model.Property;
 import com.example.RealEstateManagement.service.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/properties")
@@ -34,7 +34,7 @@ public class PropertyController {
     public Property updateProperty(@PathVariable Long id, @RequestBody Property updatedProperty) {
         Property existingProperty = propertyService.getPropertyById(id);
         if (existingProperty == null) {
-            throw new ResourceNotFoundException("property with Id not found " + id);
+            throw new NoSuchElementException("property with Id not found " + id);
         }
         existingProperty.setPrice(updatedProperty.getPrice());
         return existingProperty;
