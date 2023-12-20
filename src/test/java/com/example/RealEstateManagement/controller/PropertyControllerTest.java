@@ -16,8 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(PropertyController.class)
@@ -66,7 +65,6 @@ public class PropertyControllerTest {
                 null
         );
 
-        // Convert the Property object to JSON
         String jsonRequest = new ObjectMapper().writeValueAsString(newProperty);
 
         mockMvc.perform(post("/properties")
@@ -75,5 +73,47 @@ public class PropertyControllerTest {
                 .andExpect(status().isOk());
 
         verify(propertyService, times(1)).createProperty(any(Property.class));
+    }
+
+    @Test
+    @DisplayName("Should be able to delete a property by ID")
+    public void testDeletePropertyById() throws Exception {
+        doNothing().when(propertyService).deleteProperty(1L);
+
+        mockMvc.perform(delete("/properties/{id}", 1L))
+                .andExpect(status().isOk());
+
+        verify(propertyService, times(1)).deleteProperty(1L);
+    }
+
+    @Test
+    @DisplayName("Should be able to update an existing property")
+    public void testUpdateProperty() throws Exception {
+        Property existingProperty = new Property(
+                1L,
+                "456 Oak St",
+                "House",
+                349999.0,
+                2500,
+                4,
+                3,
+                new Date(2023, 12, 20),
+                null
+        );
+
+        when(propertyService.getPropertyById(1L)).thenReturn(existingProperty);
+
+        existingProperty.setPrice(399999.0);
+
+        doNothing().when(propertyService).updateProperty(existingProperty);
+
+        String jsonRequest = new ObjectMapper().writeValueAsString(existingProperty);
+
+        mockMvc.perform(put("/properties/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
+                .andExpect(status().isOk());
+
+        verify(propertyService, times(1)).updateProperty(any(Property.class));
     }
 }

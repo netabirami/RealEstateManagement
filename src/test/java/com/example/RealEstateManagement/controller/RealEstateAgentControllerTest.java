@@ -16,8 +16,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 @WebMvcTest(RealEstateAgentController.class)
@@ -61,7 +60,6 @@ class RealEstateAgentControllerTest {
                 "143-455-7790",
                 null);
 
-        // Convert the RealEstateAgent object to JSON
         String jsonRequest = new ObjectMapper().writeValueAsString(newRealEstateAgent);
 
         mockMvc.perform(post("/realestateagents")
@@ -71,5 +69,40 @@ class RealEstateAgentControllerTest {
 
         verify(realEstateAgentService, times(1)).createRealEstateAgent(any(RealEstateAgent.class));
     }
+    @Test
+    @DisplayName("Should be able to delete a RealEstateAgent by ID")
+    public void testDeleteRealEstateAgentById() throws Exception {
+        doNothing().when(realEstateAgentService).deleteRealEstateAgent(1L);
 
+        mockMvc.perform(delete("/realestateagents/{id}", 1L))
+                .andExpect(status().isOk());
+
+        verify(realEstateAgentService, times(1)).deleteRealEstateAgent(1L);
+    }
+
+    @Test
+    @DisplayName("Should be able to update an existing RealEstateAgent")
+    public void testUpdateRealEstateAgent() throws Exception {
+        RealEstateAgent existingRealEstateAgent = new RealEstateAgent(
+                1L,
+                "John Doe",
+                "doe.doe@example.com",
+                "143-455-7790",
+                null
+        );
+
+        when(realEstateAgentService.getRealEstateAgentById(1L)).thenReturn(existingRealEstateAgent);
+        doNothing().when(realEstateAgentService).updateRealEstateAgent(existingRealEstateAgent);
+
+        existingRealEstateAgent.setEmail("john.doe@example.com");
+        existingRealEstateAgent.setPhone("555-123-4567");
+        String jsonRequest = new ObjectMapper().writeValueAsString(existingRealEstateAgent);
+
+        mockMvc.perform(put("/realestateagents/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
+                .andExpect(status().isOk());
+
+        verify(realEstateAgentService, times(1)).updateRealEstateAgent(any(RealEstateAgent.class));
+    }
 }

@@ -37,6 +37,7 @@ public class PropertyController {
             throw new NoSuchElementException("property with Id not found " + id);
         }
         existingProperty.setPrice(updatedProperty.getPrice());
+        propertyService.updateProperty(existingProperty);
         return existingProperty;
     }
     @DeleteMapping("/{id}")

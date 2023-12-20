@@ -42,7 +42,7 @@ public class RealEstateAgentController {
         }
         existingRealEstateAgent.setEmail(updatedRealEstateAgent.getEmail());
         existingRealEstateAgent.setPhone(updatedRealEstateAgent.getPhone());
-        realEstateAgentService.createRealEstateAgent(existingRealEstateAgent);
+        realEstateAgentService.updateRealEstateAgent(existingRealEstateAgent);
         return existingRealEstateAgent;
     }
 }

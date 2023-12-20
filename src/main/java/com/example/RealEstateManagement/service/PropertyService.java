@@ -31,4 +31,7 @@ public class PropertyService {
                 () -> new NoSuchElementException("Property not found with ID: " + id)
         );
     }
+    public void updateProperty(Property existingProperty) {
+        propertyRepository.save(existingProperty);
+    }
 }

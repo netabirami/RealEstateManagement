@@ -29,4 +29,7 @@ public class RealEstateAgentService {
                 () -> new NoSuchElementException("RealEstateAgent not found with ID: " + id)
         );
     }
+    public void updateRealEstateAgent(RealEstateAgent realEstateAgent) {
+        realEstateAgentRepository.save(realEstateAgent);
+    }
 }
