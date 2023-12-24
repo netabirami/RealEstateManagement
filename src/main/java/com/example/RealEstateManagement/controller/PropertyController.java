@@ -2,13 +2,16 @@ package com.example.RealEstateManagement.controller;
 
 import com.example.RealEstateManagement.model.Property;
 import com.example.RealEstateManagement.service.PropertyService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
+@Validated
 @RequestMapping("/properties")
 public class PropertyController {
     @Autowired
@@ -26,12 +29,12 @@ public class PropertyController {
 
 
     @PostMapping
-    public Property addProperty(@RequestBody Property property) {
+    public Property addProperty(@Valid @RequestBody Property property) {
         return propertyService.createProperty(property);
     }
 
     @PutMapping("/{id}")
-    public Property updateProperty(@PathVariable Long id, @RequestBody Property updatedProperty) {
+    public Property updateProperty(@PathVariable Long id, @Valid @RequestBody Property updatedProperty) {
         Property existingProperty = propertyService.getPropertyById(id);
         if (existingProperty == null) {
             throw new NoSuchElementException("property with Id not found " + id);

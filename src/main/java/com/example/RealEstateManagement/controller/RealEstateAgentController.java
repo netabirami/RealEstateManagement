@@ -2,13 +2,16 @@ package com.example.RealEstateManagement.controller;
 
 import com.example.RealEstateManagement.model.RealEstateAgent;
 import com.example.RealEstateManagement.service.RealEstateAgentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
+@Validated
 @RequestMapping("/realestateagents")
 public class RealEstateAgentController {
     @Autowired
@@ -20,7 +23,7 @@ public class RealEstateAgentController {
     }
 
     @PostMapping
-    public RealEstateAgent addRealEstateAgent(@RequestBody RealEstateAgent property) {
+    public RealEstateAgent addRealEstateAgent(@Valid  @RequestBody RealEstateAgent property) {
         return realEstateAgentService.createRealEstateAgent(property);
     }
 
@@ -35,7 +38,7 @@ public class RealEstateAgentController {
     }
 
     @PutMapping("/{id}")
-    public RealEstateAgent updateRealEstateAgent(@PathVariable Long id, @RequestBody RealEstateAgent updatedRealEstateAgent) {
+    public RealEstateAgent updateRealEstateAgent(@Valid @PathVariable Long id, @RequestBody RealEstateAgent updatedRealEstateAgent) {
         RealEstateAgent existingRealEstateAgent = realEstateAgentService.getRealEstateAgentById(id);
         if (existingRealEstateAgent == null) {
             throw new NoSuchElementException("Real Estate Agent with Id not found " + id);
