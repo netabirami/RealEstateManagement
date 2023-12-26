@@ -28,10 +28,13 @@ public class Property {
     @Min(2_00_000) @Max(10_00_000)
     private Double price;
     @NotNull(message = "The Area should not be Null.")
+    @Min(40)  @Max(600)
     private Double area;
     @NotNull(message = "The number of bedrooms should not be Null.")
+    @Min(2) @Max(5)
     private Integer bedrooms;
     @NotNull(message = "The number of Bathroom should not be Null.")
+    @Min(1) @Max(3)
     private Integer bathrooms;
     @NotNull(message = "The date cannot be Null.")
     @Future(message = "The date should be in Future." )
