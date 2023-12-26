@@ -2,6 +2,8 @@ package com.example.RealEstateManagement.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -23,6 +25,7 @@ public class Property {
     @NotNull(message = "The Building Type should not be Null.")
     private String buildingType;
     @NotNull(message = "The Price should not be Null.")
+    @Min(2_00_000) @Max(10_00_000)
     private Double price;
     @NotNull(message = "The Area should not be Null.")
     private Double area;
