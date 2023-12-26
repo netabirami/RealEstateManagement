@@ -1,5 +1,6 @@
 package com.example.RealEstateManagement.controller;
 
+import com.example.RealEstateManagement.exception.InvalidMethodArgumentException;
 import com.example.RealEstateManagement.model.Property;
 import com.example.RealEstateManagement.service.PropertyService;
 import jakarta.validation.Valid;
@@ -30,7 +31,14 @@ public class PropertyController {
 
     @PostMapping
     public Property addProperty(@Valid @RequestBody Property property) {
-        return propertyService.createProperty(property);
+        if (property.getBuildingType().equalsIgnoreCase("House") ||
+                property.getBuildingType().equalsIgnoreCase("Apartment")){
+            return propertyService.createProperty(property);
+        }
+        else {
+            throw new InvalidMethodArgumentException("buildingType",
+                    "Invalid building type. It should be either 'House' or 'Apartment'.");
+        }
     }
 
     @PutMapping("/{id}")

@@ -1,6 +1,5 @@
 package com.example.RealEstateManagement.exception;
 
-import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -30,6 +29,13 @@ public class GlobalExceptionHandler {
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
+        return errors;
+    }
+    @ExceptionHandler({InvalidMethodArgumentException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleInvalidMethodArgumentException(InvalidMethodArgumentException ex) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put(ex.getErrorKey(), ex.getMessage());
         return errors;
     }
 }
